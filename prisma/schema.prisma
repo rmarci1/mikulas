@@ -29,9 +29,9 @@ model Gyerek{
   jatek Kot[] 
 }
 model Kot{
-  gyerekek Gyerek @relation(fields: [gyerekId], references: [id])
+  gyerekek Gyerek @relation(fields: [gyerekId], references: [id],onDelete: Cascade)
   gyerekId  Int
-  jatekok Jatek  @relation(fields: [jatekId], references: [id])
+  jatekok Jatek  @relation(fields: [jatekId], references: [id],onDelete: Cascade)
   jatekId Int
 
   @@id([gyerekId, jatekId])
