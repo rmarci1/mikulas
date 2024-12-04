@@ -1,18 +1,12 @@
-import { Type } from "class-transformer"
-import { IsArray, IsBoolean, IsInt, IsOptional, IsString } from "class-validator"
+import {IsBoolean,IsString } from "class-validator"
 
 export class CreateGyerekDto {
-    @IsString()
+    @IsString({message: 'A névnek string-nek kell lennie'})
     nev: string;
   
-    @IsString()
+    @IsString({message: 'A címnek string-nek kell lennie'})
     cim: string;
   
-    @IsBoolean()
+    @IsBoolean({message: 'A milyen-nek boolean típusúnak kell lennie'})
     milyen: boolean;
-  
-    @IsArray()
-    @IsOptional() // Ha nem kötelező játékokat hozzárendelni
-    @IsInt({ each: true })  // A jatekok egy tömbnyi integer (id) érték
-    jatekok?: number[]; 
 }

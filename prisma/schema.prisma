@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url  = env("DATABASE_URL")
 }
 
 model Jatek {
@@ -18,7 +18,7 @@ model Jatek {
   megnevezes String
   anyag String
   suly Int
-  gyerek Gyerek[] @relation("GyerekJatek")
+  gyerek Kot[]
 }
 
 model Gyerek{
@@ -26,5 +26,13 @@ model Gyerek{
   nev String
   cim String
   milyen Boolean
-  jatek Jatek[] @relation("GyerekJatek")
+  jatek Kot[] 
+}
+model Kot{
+  gyerekek Gyerek @relation(fields: [gyerekId], references: [id])
+  gyerekId  Int
+  jatekok Jatek  @relation(fields: [jatekId], references: [id])
+  jatekId Int
+
+  @@id([gyerekId, jatekId])
 }

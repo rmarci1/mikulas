@@ -1,19 +1,15 @@
-import { IsArray, IsIn, IsInt, IsNumber, IsOptional, IsString } from "class-validator"
+import {IsIn, IsInt,IsString, Min } from "class-validator"
 
 export class CreateJatekDto {
 
-    @IsString()
-    megnevezes : String
+    @IsString({message: 'A megnevezésnek string-nek kell lennie'})
+    megnevezes : string
 
-    @IsString()
-    @IsIn(['Wood', 'Metal', 'Plastic', 'Other'])
-    anyag : String
+    @IsString({message: 'Az anyagnak string-nek kell lennie'})
+    @IsIn(['wood', 'metal', 'plastic', 'other'],{message:'Az anyagnak vagy: wood, metal, plastic, other-nek kell lennie'})
+    anyag : string
 
-    @IsNumber()
-    suly : Number
-
-    @IsArray()
-    @IsOptional() // Ha nem kötelező játékokat hozzárendelni
-    @IsInt({ each: true })  // A jatekok egy tömbnyi integer (id) érték
-    gyerekek?: number[]; 
+    @IsInt({message: 'A súlynak int-nek kell lennie'})
+    @Min(0,{message:'A súlynak minimum 0-nak kell lennie'})
+    suly : number
 }

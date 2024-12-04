@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateJatekDto } from './dto/create-jatek.dto';
 import { UpdateJatekDto } from './dto/update-jatek.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -9,32 +9,61 @@ export class JatekService {
 
   create(createJatekDto: CreateJatekDto) {
     return this.prisma.jatek.create({
-      data : {
-        megnevezes : createJatekDto.megnevezes,
-        cim: createGyerekDto.cim,
-        milyen: createGyerekDto.milyen,
-        jatek: {
-          connect: createGyerekDto.jatekok?.map((id) => ({
-            id,
-          })),
-        }
-      }
+      data : createJatekDto
     });
   }
 
   findAll() {
-    return `This action returns all jatek`;
+    return this.prisma.jatek.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} jatek`;
+  async findOne(id: number) {
+    try{
+      return await this.prisma.jatek.findUniqueOrThrow({
+        where : {id}
+      });
+    }
+    catch (error) {
+      throw new HttpException(
+        `Játék with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      ); 
+    }
   }
 
-  update(id: number, updateJatekDto: UpdateJatekDto) {
-    return `This action updates a #${id} jatek`;
+    async update(id: number, updateJatekDto: UpdateJatekDto) {
+    try{
+      await this.prisma.jatek.findUniqueOrThrow({
+        where : {id}
+      });
+      return this.prisma.jatek.update({
+        where: {id},
+        data : updateJatekDto
+      });
+    }
+    catch (error) {
+      throw new HttpException(
+        `Játék with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      ); 
+    }
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} jatek`;
+  async remove(id: number) {
+    try{
+      await this.prisma.jatek.findUniqueOrThrow({
+        where : {id}
+      });
+      return this.prisma.jatek.delete({
+        where: {id}
+      });
+    }
+    catch (error) {
+      throw new HttpException(
+        `Játék with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      ); 
+    }
   }
 }
